@@ -1,0 +1,45 @@
+import bpy
+
+blue="Material.001"
+red="Material.003"
+def add_color(ob,color):
+    mat=bpy.data.materials.get(color)
+    # Assign it to object
+    if ob.data.materials:
+        # assign to 1st material slot
+        ob.data.materials[0] = mat
+    else:
+        # no slots
+        ob.data.materials.append(mat)
+    #bpy.data.objects[0].material_slots.append(mat)
+
+#FUNTION for checker pattern
+def flip_color(paint,red,blue):
+    if (paint == red):
+        return blue
+    else:
+        return red   
+#MAIN
+#CLEAR SCENE
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete(use_global=False)
+
+#ADD LIGHT
+bpy.ops.object.light_add(type="SUN",location=(10,10,30))
+
+#ADD CAMERA
+bpy.ops.object.camera_add(enter_editmode=False, align='VIEW', location=(55, 8, 8), rotation=(4.7, 9.5, 4.7))
+
+
+#CREATE CHECKER BOARD
+paint=red
+for i in range(8):
+    for j in range(8):
+        bpy.ops.mesh.primitive_cube_add(location=((0), (j*2), (i*2)))
+        add_color(bpy.context.active_object,paint)
+        paint=flip_color(paint,red,blue)
+    paint=flip_color(paint,red,blue)    
+
+   
+
+
